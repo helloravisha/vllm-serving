@@ -1,0 +1,13 @@
+# Llama 3.1 8B (NVIDIA weights are gated: accept the license + HF_TOKEN)
+# type: chat
+# Start: ./serve.sh configs/nvidia/llama3.1-8b.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: meta-llama/Llama-3.1-8B-Instruct
+served-model-name: meta-llama/Llama-3.1-8B-Instruct     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8003
+max-model-len: 8192
+gpu-memory-utilization: 0.9
+enable-auto-tool-choice: true
+tool-call-parser: llama3_json

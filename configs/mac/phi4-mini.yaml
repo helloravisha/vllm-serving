@@ -1,0 +1,11 @@
+# Phi-4-mini 3.8B, MIT license. Chat only: tool calling needs vLLM's examples/tool_chat_template_phi4_mini.jinja (not shipped in the package)
+# type: chat
+# Start: ./serve.sh configs/mac/phi4-mini.yaml
+
+model: microsoft/Phi-4-mini-instruct
+served-model-name: microsoft/Phi-4-mini-instruct     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8005
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.35   # share of unified memory; Mac RAM is shared with your apps

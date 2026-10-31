@@ -1,0 +1,12 @@
+# Persistent model cache so pod restarts don't re-download weights (Qwen3-8B is ~16 GB).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-qwen3-8b-cache
+  labels: {app: vllm, model: qwen3-8b}
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: standard-rwo      # GKE balanced persistent disk
+  resources:
+    requests:
+      storage: 50Gi

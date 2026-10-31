@@ -1,0 +1,12 @@
+# Qwen3 0.6B decision model; use structured outputs to constrain answers
+# type: decision
+# Start: ./serve.sh configs/mac/qwen3-0.6b-decider.yaml
+
+model: Qwen/Qwen3-0.6B
+served-model-name: Qwen/Qwen3-0.6B     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8020
+api-key: dummy
+max-model-len: 4096
+gpu-memory-utilization: 0.2   # share of unified memory; Mac RAM is shared with your apps
+reasoning-parser: qwen3       # send chat_template_kwargs.enable_thinking=false for fast answers

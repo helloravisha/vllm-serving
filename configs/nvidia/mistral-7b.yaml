@@ -1,0 +1,14 @@
+# Mistral 7B v0.3
+# type: chat
+# Start: ./serve.sh configs/nvidia/mistral-7b.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: mistralai/Mistral-7B-Instruct-v0.3
+served-model-name: mistralai/Mistral-7B-Instruct-v0.3     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8004
+max-model-len: 8192
+gpu-memory-utilization: 0.9
+enable-auto-tool-choice: true
+tool-call-parser: mistral
+tokenizer-mode: mistral

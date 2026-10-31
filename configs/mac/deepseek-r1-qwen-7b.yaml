@@ -1,0 +1,12 @@
+# DeepSeek R1 distilled into Qwen 7B, reasoning model
+# type: reasoning
+# Start: ./serve.sh configs/mac/deepseek-r1-qwen-7b.yaml
+
+model: mlx-community/DeepSeek-R1-Distill-Qwen-7B-4bit
+served-model-name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8010
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.35   # share of unified memory; Mac RAM is shared with your apps
+reasoning-parser: deepseek_r1   # thinking goes to a separate 'reasoning' field

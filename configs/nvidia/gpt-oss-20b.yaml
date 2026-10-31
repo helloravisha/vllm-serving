@@ -1,0 +1,14 @@
+# OpenAI gpt-oss 20B (experimental on Mac)
+# type: chat
+# Start: ./serve.sh configs/nvidia/gpt-oss-20b.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: openai/gpt-oss-20b
+served-model-name: openai/gpt-oss-20b     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8007
+max-model-len: 8192
+gpu-memory-utilization: 0.9
+enable-auto-tool-choice: true
+tool-call-parser: openai
+reasoning-parser: openai_gptoss

@@ -1,0 +1,13 @@
+# BGE-M3 multilingual embedding model, /v1/embeddings
+# type: embed
+# Start: ./serve.sh configs/nvidia/bge-m3.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: BAAI/bge-m3
+served-model-name: BAAI/bge-m3     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8031
+max-model-len: 8192
+gpu-memory-utilization: 0.3
+runner: pooling
+convert: embed

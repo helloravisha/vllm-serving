@@ -1,0 +1,14 @@
+# OpenAI gpt-oss 20B (experimental on Mac)
+# type: chat
+# Start: ./serve.sh configs/mac/gpt-oss-20b.yaml
+
+model: openai/gpt-oss-20b
+served-model-name: openai/gpt-oss-20b     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8007
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.5   # share of unified memory; Mac RAM is shared with your apps
+enable-auto-tool-choice: true
+tool-call-parser: openai
+reasoning-parser: openai_gptoss

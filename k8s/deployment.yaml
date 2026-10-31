@@ -1,0 +1,62 @@
+# One vLLM server for one model on one GPU. To deploy another model, copy the
+# k8s files and change the names, the configmap content, the port and the GPU type.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-qwen3-8b
+  labels: {app: vllm, model: qwen3-8b}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                    # the cache volume is ReadWriteOnce
+  selector:
+    matchLabels: {app: vllm, model: qwen3-8b}
+  template:
+    metadata:
+      labels: {app: vllm, model: qwen3-8b}
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-l4   # 24 GB GPU; enough for 7-8B models
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.32.0
+          args: ["--config", "/config/model.yaml"]
+          ports:
+            - name: http
+              containerPort: 8002
+          env:
+            - name: VLLM_API_KEY
+              valueFrom:
+                secretKeyRef: {name: vllm-secrets, key: api-key}
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef: {name: vllm-secrets, key: hf-token, optional: true}
+          resources:
+            requests: {cpu: "4", memory: 24Gi, nvidia.com/gpu: 1}
+            limits: {memory: 32Gi, nvidia.com/gpu: 1}
+          startupProbe:                 # first start downloads + loads the model
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+            failureThreshold: 90        # up to 15 minutes
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - {name: config, mountPath: /config, readOnly: true}
+            - {name: hf-cache, mountPath: /root/.cache/huggingface}
+            - {name: dshm, mountPath: /dev/shm}
+      volumes:
+        - name: config
+          configMap: {name: vllm-qwen3-8b-config}
+        - name: hf-cache
+          persistentVolumeClaim: {claimName: vllm-qwen3-8b-cache}
+        - name: dshm                    # vLLM needs more shared memory than the 64 MB default
+          emptyDir: {medium: Memory, sizeLimit: 4Gi}

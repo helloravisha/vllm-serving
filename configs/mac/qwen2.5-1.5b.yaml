@@ -1,0 +1,13 @@
+# Qwen2.5 1.5B, small and fast
+# type: chat
+# Start: ./serve.sh configs/mac/qwen2.5-1.5b.yaml
+
+model: Qwen/Qwen2.5-1.5B-Instruct
+served-model-name: Qwen/Qwen2.5-1.5B-Instruct     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8000
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.25   # share of unified memory; Mac RAM is shared with your apps
+enable-auto-tool-choice: true
+tool-call-parser: hermes

@@ -1,0 +1,11 @@
+# Liquid LFM2.5 1.2B decision model; use structured outputs to constrain answers
+# type: decision
+# Start: ./serve.sh configs/nvidia/lfm2.5-1.2b-decider.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: LiquidAI/LFM2.5-1.2B-Instruct
+served-model-name: LiquidAI/LFM2.5-1.2B-Instruct     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8021
+max-model-len: 4096
+gpu-memory-utilization: 0.3

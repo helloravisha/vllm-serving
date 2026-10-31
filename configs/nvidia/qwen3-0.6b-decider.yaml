@@ -1,0 +1,12 @@
+# Qwen3 0.6B decision model; use structured outputs to constrain answers
+# type: decision
+# Start: ./serve.sh configs/nvidia/qwen3-0.6b-decider.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: Qwen/Qwen3-0.6B
+served-model-name: Qwen/Qwen3-0.6B     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8020
+max-model-len: 4096
+gpu-memory-utilization: 0.3
+reasoning-parser: qwen3       # send chat_template_kwargs.enable_thinking=false for fast answers

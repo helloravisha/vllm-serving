@@ -1,0 +1,11 @@
+# Gemma 3 12B, no tool calling configured (NVIDIA weights are gated: accept the license + HF_TOKEN)
+# type: chat
+# Start: ./serve.sh configs/mac/gemma3-12b.yaml
+
+model: mlx-community/gemma-3-12b-it-4bit
+served-model-name: google/gemma-3-12b-it     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8006
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.4   # share of unified memory; Mac RAM is shared with your apps

@@ -1,0 +1,14 @@
+# Qwen3 reranker, /rerank
+# type: rerank
+# Start: ./serve.sh configs/mac/qwen3-reranker-0.6b.yaml
+
+model: mku64/Qwen3-Reranker-0.6B-mlx-8Bit
+served-model-name: Qwen/Qwen3-Reranker-0.6B     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8032
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.2   # share of unified memory; Mac RAM is shared with your apps
+runner: pooling
+convert: classify
+hf-overrides: '{"architectures": ["Qwen3ForSequenceClassification"], "classifier_from_token": ["no", "yes"], "is_original_qwen3_reranker": true}'

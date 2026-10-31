@@ -1,0 +1,11 @@
+# Liquid LFM2.5 1.2B decision model; use structured outputs to constrain answers
+# type: decision
+# Start: ./serve.sh configs/mac/lfm2.5-1.2b-decider.yaml
+
+model: LiquidAI/LFM2.5-1.2B-Instruct
+served-model-name: LiquidAI/LFM2.5-1.2B-Instruct     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8021
+api-key: dummy
+max-model-len: 4096
+gpu-memory-utilization: 0.2   # share of unified memory; Mac RAM is shared with your apps

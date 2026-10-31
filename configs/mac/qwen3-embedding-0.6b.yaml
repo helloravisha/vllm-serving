@@ -1,0 +1,13 @@
+# Qwen3 embedding model, /v1/embeddings
+# type: embed
+# Start: ./serve.sh configs/mac/qwen3-embedding-0.6b.yaml
+
+model: mlx-community/Qwen3-Embedding-0.6B-8bit
+served-model-name: Qwen/Qwen3-Embedding-0.6B     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8030
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.2   # share of unified memory; Mac RAM is shared with your apps
+runner: pooling
+convert: embed

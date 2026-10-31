@@ -1,0 +1,13 @@
+# BGE-M3 multilingual embedding model, /v1/embeddings
+# type: embed
+# Start: ./serve.sh configs/mac/bge-m3.yaml
+
+model: BAAI/bge-m3
+served-model-name: BAAI/bge-m3     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8031
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.2   # share of unified memory; Mac RAM is shared with your apps
+runner: pooling
+convert: embed

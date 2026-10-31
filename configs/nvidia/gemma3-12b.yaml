@@ -1,0 +1,11 @@
+# Gemma 3 12B, no tool calling configured (NVIDIA weights are gated: accept the license + HF_TOKEN)
+# type: chat
+# Start: ./serve.sh configs/nvidia/gemma3-12b.yaml
+# API key: set VLLM_API_KEY in the environment (never commit it)
+
+model: google/gemma-3-12b-it
+served-model-name: google/gemma-3-12b-it     # the id clients and the gateway use
+host: 0.0.0.0
+port: 8006
+max-model-len: 8192
+gpu-memory-utilization: 0.9

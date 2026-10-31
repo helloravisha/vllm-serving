@@ -1,0 +1,111 @@
+# Docker flavour (Linux + NVIDIA GPU + NVIDIA Container Toolkit).
+# Each model is its own service; nothing starts unless you name it:
+#   cp .env.example .env            # then fill in VLLM_API_KEY (and HF_TOKEN for gated models)
+#   docker compose up -d qwen3-8b   # start one model
+#   docker compose logs -f qwen3-8b
+#   docker compose down
+# Settings come from ../configs/nvidia/<service>.yaml (same files as the Linux and Kubernetes flavours).
+
+x-vllm: &vllm
+  image: vllm/vllm-openai:${VLLM_IMAGE_TAG:-v0.32.0}
+  env_file: .env
+  ipc: host                       # vLLM needs large shared memory between its processes
+  volumes:
+    - ../configs/nvidia:/configs:ro
+    - hf-cache:/root/.cache/huggingface   # model weights survive container restarts
+  restart: unless-stopped
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: 1              # one GPU per model; on a single-GPU machine run one model at a time
+            capabilities: [gpu]
+
+services:
+  bge-m3:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/bge-m3.yaml"]
+    ports: ["8031:8031"]
+
+  deepseek-r1-qwen-7b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/deepseek-r1-qwen-7b.yaml"]
+    ports: ["8010:8010"]
+
+  gemma3-12b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/gemma3-12b.yaml"]
+    ports: ["8006:8006"]
+
+  gpt-oss-20b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/gpt-oss-20b.yaml"]
+    ports: ["8007:8007"]
+
+  lfm2.5-1.2b-decider:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/lfm2.5-1.2b-decider.yaml"]
+    ports: ["8021:8021"]
+
+  llama3.1-8b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/llama3.1-8b.yaml"]
+    ports: ["8003:8003"]
+
+  mistral-7b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/mistral-7b.yaml"]
+    ports: ["8004:8004"]
+
+  phi4-mini:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/phi4-mini.yaml"]
+    ports: ["8005:8005"]
+
+  qwen2.5-1.5b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen2.5-1.5b.yaml"]
+    ports: ["8000:8000"]
+
+  qwen2.5-7b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen2.5-7b.yaml"]
+    ports: ["8001:8001"]
+
+  qwen3-0.6b-decider:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen3-0.6b-decider.yaml"]
+    ports: ["8020:8020"]
+
+  qwen3-8b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen3-8b.yaml"]
+    ports: ["8002:8002"]
+
+  qwen3-embedding-0.6b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen3-embedding-0.6b.yaml"]
+    ports: ["8030:8030"]
+
+  qwen3-reranker-0.6b:
+    <<: *vllm
+    profiles: [models]
+    command: ["--config", "/configs/qwen3-reranker-0.6b.yaml"]
+    ports: ["8032:8032"]
+
+volumes:
+  hf-cache:

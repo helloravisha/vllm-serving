@@ -1,0 +1,13 @@
+# Qwen2.5 7B
+# type: chat
+# Start: ./serve.sh configs/mac/qwen2.5-7b.yaml
+
+model: mlx-community/Qwen2.5-7B-Instruct-4bit
+served-model-name: Qwen/Qwen2.5-7B-Instruct     # the id clients and the gateway use
+host: 127.0.0.1
+port: 8001
+api-key: dummy
+max-model-len: 8192
+gpu-memory-utilization: 0.35   # share of unified memory; Mac RAM is shared with your apps
+enable-auto-tool-choice: true
+tool-call-parser: hermes
