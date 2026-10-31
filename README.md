@@ -15,21 +15,50 @@ deployments.
 ## What is vLLM?
 
 An AI model on its own is just a large file of numbers ("weights"). To use it you need software that loads it onto
-a GPU, accepts requests, runs the model and sends back answers. That software is a **serving engine**, and
-**[vLLM](https://github.com/vllm-project/vllm)** is the most widely used open-source one.
+a GPU, accepts requests, runs the model and sends back answers. That software is a **serving engine**.
+
+**[vLLM](https://github.com/vllm-project/vllm)** is a high-throughput, memory-efficient serving engine for running
+open models (Llama, Mistral, Qwen, …) in production, and the most widely used open-source one. A basic model
+runner, such as a simple Hugging Face script, wastes a lot of GPU memory and handles users one at a time; vLLM is
+built to serve many users at once, quickly and at low cost.
 
 ```
 your app ──HTTP──▶  vLLM server  ──▶  model on the GPU
             ◀── answer ──┘
 ```
 
-Why vLLM:
+### The problem vLLM solves
 
-- **OpenAI-compatible API.** It answers on the same endpoints and in the same format as OpenAI
+While a model writes an answer, the GPU keeps a **KV cache** for every request: the model's working memory of that
+conversation so far. With many users at once, there is one KV cache per user, and these take up most of the GPU
+memory that isn't used by the model itself.
+
+Before vLLM, serving engines handled this memory badly:
+
+- **Reserved too much up front.** Each request got one large, continuous block of memory sized for the *longest
+  possible* conversation, even if the user only asked a short question.
+- **Wasted most of it.** The vLLM authors measured that existing systems wasted **60–80% of the memory reserved
+  for KV caches**, sitting empty or fragmented. Less usable memory means fewer users served at the same time.
+
+### How vLLM fixes it: PagedAttention
+
+vLLM's key idea, **PagedAttention**, borrows from how operating systems manage RAM with *virtual memory* and
+*paging* (the idea behind the project's name):
+
+- Instead of one large continuous block per conversation, the KV cache is split into small, fixed-size **pages**.
+- Pages can sit anywhere in GPU memory, not side by side, and are **allocated as each new word is generated and
+  freed** as soon as a request finishes.
+- So memory is used only for text that actually exists. Waste drops to almost nothing, and the freed memory serves
+  more users.
+
+### Key benefits
+
+- **High concurrency.** With almost no wasted memory, many more requests fit on the same GPU at the same time.
+- **High throughput.** **Continuous batching** groups incoming requests together on the fly: a new request joins
+  the batch as soon as there is room, instead of waiting for the current batch to finish, which keeps the GPU busy.
+- **OpenAI-compatible API.** The server answers on the same endpoints and in the same format as OpenAI
   (`/v1/chat/completions`, `/v1/embeddings`, …). Any app or library that can call OpenAI can call vLLM by changing
-  only the URL.
-- **Fast with many users.** It serves many requests at once efficiently (continuous batching, paged KV cache), which
-  is why it's a common choice for production.
+  only the URL, and it plugs into LLM gateways such as LiteLLM or our own LLM Gateway.
 - **Many models.** Most popular open model families work out of the box (Qwen, Llama, Mistral, Gemma, Phi,
   gpt-oss, DeepSeek, …), including chat, embedding and reranking models.
 - **Runs in many places.** NVIDIA GPUs (main target), and Apple Silicon Macs through the
