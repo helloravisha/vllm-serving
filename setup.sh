@@ -31,7 +31,9 @@ echo "Installing dependencies..."
 (cd vllm && uv pip install -r requirements/cpu.txt)
 
 echo "Building vLLM (this is the slow part)..."
-(cd vllm && uv pip install -e .)
+# The patch makes the tree "dirty", which would version the build as 0.32.1.devN; pin it.
+(cd vllm && SETUPTOOLS_SCM_PRETEND_VERSION="${VLLM_VERSION#v}" uv pip install -e .)
 
-python -c "import vllm; print('vLLM', vllm.__version__, 'installed')"
+# Run from / so the vllm/ source folder here doesn't shadow the installed package.
+(cd / && python -c "import vllm; print('vLLM', vllm.__version__, 'installed')")
 echo "Done. Next: ./serve.sh   then in another terminal: ./test.sh"
