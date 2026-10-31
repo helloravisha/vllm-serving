@@ -30,7 +30,5 @@ Open items for this repo, as of 2026-10-31. Gateway-side work is tracked in the 
 
 ## To do
 
-- **Push to GitHub** under **github.com/helloravisha** (on hold until requested); the repo exists only on this
-  Mac. Repo name and private/public still to choose.
 - **Add a JSON-mode check to `test.sh`** (`response_format: json_object` / JSON schema), matching how the
   gateway's planner calls local models today, alongside the native tool-call check.
