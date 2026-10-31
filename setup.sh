@@ -47,5 +47,5 @@ if [[ $PLATFORM == mac ]]; then
   (cd / && python -c "import vllm_metal; print('vllm-metal installed')")
 fi
 
-echo "Done. Next: ./serve.sh configs/$PLATFORM/qwen2.5-1.5b.yaml"
-echo "     then:  ./test.sh configs/$PLATFORM/qwen2.5-1.5b.yaml"
+echo "Done. Check a model:  ./test-model.sh configs/$PLATFORM/qwen2.5-1.5b.yaml"
+echo "     Or run one:       ./serve.sh configs/$PLATFORM/qwen2.5-1.5b.yaml"
