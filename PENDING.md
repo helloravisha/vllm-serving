@@ -23,6 +23,11 @@ Open items for this repo, as of 2026-10-31. Gateway-side work is tracked in the 
   scored 0.79. Qwen3-Reranker expects its instruction prompt format; try that before relying on absolute
   scores or thresholds.
 
+- **Decision models: format passes, accuracy unproven.** `test.sh` only checks the answer is one of the allowed
+  options. A quick check of `qwen3-0.6b-decider` routed 4/6 sample requests correctly (missed both small-talk
+  requests) and was sensitive to prompt wording. Needs an evaluation on real gateway requests before use
+  (and comparison with `lfm2.5-1.2b-decider` / larger models, few-shot prompts).
+
 ## To do
 
 - **Push to GitHub** under **github.com/helloravisha** (on hold until requested); the repo exists only on this
