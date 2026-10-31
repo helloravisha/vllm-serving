@@ -27,7 +27,5 @@ Open items for this repo, as of 2026-10-31. Gateway-side work is tracked in the 
 
 - **Push to a shared Git host** (e.g. GitHub) for the team; the repo exists only on this Mac. Needs a repo name
   and private/public decision.
-- **Clean up local disk after testing.** Models + `.venv` use ~64 GB. Options: `./cleanup.sh --models`
-  (~62 GB, keeps `.venv` for gateway testing) or `./cleanup.sh --all` (~64 GB). Not decided yet.
 - **Add a JSON-mode check to `test.sh`** (`response_format: json_object` / JSON schema), matching how the
   gateway's planner calls local models today, alongside the native tool-call check.
