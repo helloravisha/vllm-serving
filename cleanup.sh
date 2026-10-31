@@ -91,7 +91,7 @@ fi
 if [[ -n "${incomplete:-}" ]]; then
   "${HF[@]}" cache prune -y >/dev/null && echo "removed incomplete HF downloads"
 fi
-for p in "${paths[@]}"; do rm -rf "$p" && echo "deleted ${p/#$HOME/~}"; done
+for p in ${paths[@]+"${paths[@]}"}; do rm -rf "$p" && echo "deleted ${p/#$HOME/~}"; done
 if [[ $docker_ok -eq 1 ]]; then
   docker ps -aq --filter ancestor=vllm/vllm-openai | xargs -r docker rm -f >/dev/null
   docker images -q vllm/vllm-openai | xargs -r docker rmi -f >/dev/null
