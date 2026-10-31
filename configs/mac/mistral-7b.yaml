@@ -11,3 +11,5 @@ max-model-len: 8192
 gpu-memory-utilization: 0.35   # share of unified memory; Mac RAM is shared with your apps
 enable-auto-tool-choice: true
 tool-call-parser: mistral
+tokenizer: mistralai/Mistral-7B-Instruct-v0.3   # official tokenizer; the MLX copy lacks Mistral's tool-call format
+tokenizer-mode: mistral

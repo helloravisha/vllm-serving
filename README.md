@@ -35,21 +35,23 @@ Ports group by type: 800x chat, 801x reasoning, 802x decision, 803x embedding/re
 | Config | Model id (what clients send) | Type | Port | Mac tested |
 |---|---|---|---|---|
 | `qwen2.5-1.5b` | Qwen/Qwen2.5-1.5B-Instruct | chat + tools | 8000 | ✅ chat, tools |
-| `qwen2.5-7b` | Qwen/Qwen2.5-7B-Instruct | chat + tools | 8001 | not yet |
+| `qwen2.5-7b` | Qwen/Qwen2.5-7B-Instruct | chat + tools | 8001 | ✅ chat, tools |
 | `qwen3-8b` | Qwen/Qwen3-8B | chat + tools + thinking | 8002 | ✅ chat, tools, thinking |
 | `llama3.1-8b` | meta-llama/Llama-3.1-8B-Instruct | chat + tools | 8003 | ✅ chat, tools |
-| `mistral-7b` | mistralai/Mistral-7B-Instruct-v0.3 | chat + tools | 8004 | not yet |
+| `mistral-7b` | mistralai/Mistral-7B-Instruct-v0.3 | chat + tools | 8004 | ✅ chat, tools (see note) |
 | `phi4-mini` | microsoft/Phi-4-mini-instruct | chat | 8005 | ✅ chat |
-| `gemma3-12b` | google/gemma-3-12b-it | chat | 8006 | not yet |
-| `gpt-oss-20b` | openai/gpt-oss-20b | chat + tools + thinking | 8007 | not yet |
-| `deepseek-r1-qwen-7b` | deepseek-ai/DeepSeek-R1-Distill-Qwen-7B | reasoning | 8010 | not yet |
+| `gemma3-12b` | google/gemma-3-12b-it | chat | 8006 | ✅ chat |
+| `gpt-oss-20b` | openai/gpt-oss-20b | chat + tools + thinking | 8007 | ✅ chat, tools, thinking |
+| `deepseek-r1-qwen-7b` | deepseek-ai/DeepSeek-R1-Distill-Qwen-7B | reasoning | 8010 | ✅ chat, reasoning |
 | `qwen3-0.6b-decider` | Qwen/Qwen3-0.6B | decision | 8020 | ✅ structured choice |
 | `lfm2.5-1.2b-decider` | LiquidAI/LFM2.5-1.2B-Instruct | decision | 8021 | ✅ structured choice |
 | `qwen3-embedding-0.6b` | Qwen/Qwen3-Embedding-0.6B | embedding | 8030 | ✅ embeddings |
 | `bge-m3` | BAAI/bge-m3 | embedding | 8031 | ✅ embeddings |
 | `qwen3-reranker-0.6b` | Qwen/Qwen3-Reranker-0.6B | reranker | 8032 | ✅ ranking (see note) |
 
-Notes from Mac testing (2026-10-31, M4 Pro):
+All 14 models pass `./test.sh` on Mac. Notes from testing (2026-10-31, M4 Pro):
+- `mistral-7b` on Mac loads the official `mistralai` tokenizer (`tokenizer` + `tokenizer-mode: mistral`);
+  with the MLX copy's tokenizer, tool calls came back as plain text.
 - `phi4-mini` is chat-only: its tool calling needs `examples/tool_chat_template_phi4_mini.jinja` from the vLLM
   source repo, which the package doesn't ship.
 - `qwen3-reranker-0.6b` ranks correctly but scores are compressed (an unrelated document still scored 0.79);
