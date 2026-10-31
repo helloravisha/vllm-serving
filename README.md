@@ -20,6 +20,7 @@ setup.sh      install vLLM into .venv (Mac: vllm + vllm-metal, Linux: pip instal
 serve.sh      start one model:            ./serve.sh configs/<mac|nvidia>/<model>.yaml
 test.sh       check a running server:     ./test.sh configs/<mac|nvidia>/<model>.yaml
 status.sh     what's running + disk used (read-only)
+PENDING.md    open items (unverified parts, known limitations, to-dos)
 cleanup.sh    free disk space (asks first)
 configs/mac/      one file per model, tuned for Apple Silicon
 configs/nvidia/   same models, tuned for NVIDIA GPUs (Linux, Docker, Kubernetes)
