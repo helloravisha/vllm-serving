@@ -1,4 +1,4 @@
-# llm-serving
+# vllm-serving
 
 Run open AI models (Qwen, Llama, Mistral, Gemma, …) on your own hardware and call them through the same API as
 OpenAI. Works on an Apple Silicon Mac for local testing and on NVIDIA GPUs (Linux, Docker, Kubernetes) for real
@@ -76,7 +76,7 @@ Everything uses vLLM **v0.32.0**.
 few GB of free disk. No Hugging Face account is needed for the Mac configs.
 
 ```bash
-git clone <this repo> llm-serving && cd llm-serving
+git clone https://github.com/helloravisha/vllm-serving.git && cd vllm-serving
 ./setup.sh                                        # installs vLLM into .venv (about 1 minute)
 ./test-model.sh configs/mac/qwen2.5-1.5b.yaml     # downloads a small model (3 GB) and checks it
 ```
