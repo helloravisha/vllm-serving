@@ -19,6 +19,7 @@ LLM Gateway only need the server's address, API key and model id.
 setup.sh      install vLLM into .venv (Mac: vllm + vllm-metal, Linux: pip install vllm)
 serve.sh      start one model:            ./serve.sh configs/<mac|nvidia>/<model>.yaml
 test.sh       check a running server:     ./test.sh configs/<mac|nvidia>/<model>.yaml
+test-model.sh start + test + stop a model: ./test-model.sh configs/<mac|nvidia>/<model>.yaml
 status.sh     what's running + disk used (read-only)
 PENDING.md    open items (unverified parts, known limitations, to-dos)
 cleanup.sh    free disk space (asks first)
@@ -76,6 +77,27 @@ on the model page (`hf auth login`, or `HF_TOKEN` for Docker/Kubernetes). The Ma
    `vllm serve --help=all`) and a `max-model-len` within the model's context window.
 4. For Docker, add a service block to `docker/docker-compose.yml`.
 5. Start it and run `./test.sh` on it.
+
+## Testing models
+
+`test-model.sh` checks one model end to end: starts its server (downloading the model on first use), waits until
+it's ready, runs `test.sh`, stops the server and prints PASS/FAIL (exit code 0/1). Server output goes to
+`logs/<model>.log`.
+
+```bash
+./test-model.sh configs/mac/qwen3-8b.yaml
+./test-model.sh configs/mac/qwen3-8b.yaml --cleanup-after   # delete the model's files afterwards (saves disk)
+./test-model.sh configs/mac/qwen3-8b.yaml --port 9002       # if the config's port is busy
+
+# several models, one after another
+for c in configs/mac/qwen2.5-1.5b.yaml configs/mac/qwen3-8b.yaml; do ./test-model.sh "$c"; done
+```
+
+You don't need any model downloaded beforehand. All 14 together are ~65 GB; with `--cleanup-after` you only
+need room for the largest single model (gpt-oss-20b, ~14 GB). `TIMEOUT_MIN` (default 60) caps how long it waits
+for download + startup.
+
+Use `test.sh` directly when a server is already running (yours, Docker, or Kubernetes via port-forward).
 
 ## Mac
 
