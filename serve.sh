@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-# Start a local vLLM (CPU) server with an OpenAI-compatible API on :${PORT}.
+# Start a local vLLM (CPU) server from a model config.
+#   ./serve.sh                              # default: configs/qwen-1.5b.yaml
+#   ./serve.sh configs/qwen-7b.yaml
+#   ./serve.sh configs/qwen-7b.yaml --port 8001   # extra flags override the config
 set -euo pipefail
 cd "$(dirname "$0")"
+
+CONFIG="${1:-configs/qwen-1.5b.yaml}"
+[[ $# -gt 0 ]] && shift
+[[ -f "$CONFIG" ]] || { echo "Config not found: $CONFIG" >&2; exit 1; }
+[[ -d .venv ]] || { echo "Not installed yet - run ./setup.sh first" >&2; exit 1; }
+
 source .venv/bin/activate
-
-MODEL="${MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
-PORT="${PORT:-8000}"
-API_KEY="${VLLM_API_KEY:-dummy}"            # gateway requires a non-empty key
-export VLLM_CPU_KVCACHE_SPACE="${VLLM_CPU_KVCACHE_SPACE:-8}"   # GB of RAM for KV cache
-
-exec vllm serve "$MODEL" \
-  --port "$PORT" \
-  --api-key "$API_KEY" \
-  --dtype float16 \
-  --max-model-len "${MAX_MODEL_LEN:-4096}"
+exec vllm serve --config "$CONFIG" "$@"
